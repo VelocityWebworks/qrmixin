@@ -2,12 +2,12 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='qrmixin',
-    version='0.1',
-    description="A collection of fabric utils",
+    name='django-qrmixin',
+    version='1.0.1',
+    description="Provides a QR code generating mixin for django models",
     author="Danemco, LLC",
     author_email='dev@velocitywebworks.com',
-    url='https://git.velocitywebworks.com/lib/danemco-fabric.git',
+    url='https://bitbucket.org/freakypie/django-qrmixin',
     packages=find_packages(),
-    install_requires=['fabric>=1.7.0', 'requests', 'python-gitlab'],
+    install_requires=['qrcode'],
 )

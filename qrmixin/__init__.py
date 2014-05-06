@@ -33,8 +33,6 @@ class QRMixin(object):
         except OSError:
             pass
         code_image.save(filename, "png")
-        image_field = rel_filename
-
-        print rel_filename
+        setattr(self, self.qr_image_field, rel_filename)
 
         return filename
