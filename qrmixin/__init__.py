@@ -1,5 +1,8 @@
-from django.conf import settings
 import os
+import StringIO
+
+from django.conf import settings
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 import qrcode
 
@@ -20,19 +23,12 @@ class QRMixin(object):
             box_size=self.qr_box_size,
             border=self.qr_border_size
         )
-        filename = "qr_{code}.png".format(code=qr_code)
         image_field = getattr(self, self.qr_image_field)
-        rel_filename = image_field.field.generate_filename(self, filename)
-        filename = os.path.join(
-            settings.MEDIA_ROOT,
-            rel_filename
-        )
-        try:
-            dirname = os.path.dirname(filename)
-            os.makedirs(dirname)
-        except OSError:
-            pass
-        code_image.save(filename, "png")
-        setattr(self, self.qr_image_field, rel_filename)
+        buffer = StringIO.StringIO()
+        code_image.save(buffer, "png")
+        filename = "qr_{code}.png".format(code=qr_code)
+        filename = image_field.field.generate_filename(self, filename)
+        filebuffer = InMemoryUploadedFile(buffer, None, filename, 'image/png', buffer.len, None)
+        image_field.save(filename, filebuffer)
 
         return filename
