@@ -24,7 +24,7 @@ class QRMixin(object):
             border=self.qr_border_size
         )
         image_field = getattr(self, self.qr_image_field)
-        buffer = StringIO.StringIO()
+        buffer = StringIO()
         code_image.save(buffer, "png")
         filename = "qr_{code}.png".format(code=qr_code)
         filename = image_field.field.generate_filename(self, filename)
