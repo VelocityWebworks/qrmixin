@@ -1,5 +1,5 @@
 import os
-from io import StringIO
+from io import BytesIO
 
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -24,11 +24,11 @@ class QRMixin(object):
             border=self.qr_border_size
         )
         image_field = getattr(self, self.qr_image_field)
-        buffer = StringIO()
+        buffer = BytesIO()
         code_image.save(buffer, "png")
         filename = "qr_{code}.png".format(code=qr_code)
         filename = image_field.field.generate_filename(self, filename)
-        filebuffer = InMemoryUploadedFile(buffer, None, filename, 'image/png', buffer.len, None)
+        filebuffer = InMemoryUploadedFile(buffer, None, filename, 'image/png', buffer.tell(), None)
         image_field.save(filename, filebuffer)
 
         return filename
